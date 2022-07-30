@@ -1,7 +1,7 @@
 const Sequelize = require('sequelize');
 const db = require('./dp');
 
-const User = db.define('registerplayers',
+const User = db.define('players',
     {
         id: {
             type: Sequelize.INTEGER,
@@ -13,36 +13,12 @@ const User = db.define('registerplayers',
             type: Sequelize.STRING,
             allowNull: false,
         },
-        email: {
-            type: Sequelize.STRING,
-            allowNull: false,
-        },
-        tel: {
-            type: Sequelize.STRING,
-            allowNull: false,
-        },
-        birth: {
-            type: Sequelize.STRING,
-            allowNull: false,
-        },
-        nationality: {
-            type: Sequelize.STRING,
-            allowNull: false,
-        },
         position: {
             type: Sequelize.STRING,
             allowNull: false,
         },
         cap: {
             type: Sequelize.BOOLEAN,
-            allowNull: false,
-        },
-        descripition: {
-            type: Sequelize.TEXT,
-            allowNull: false,
-        },
-        sexo: {
-            type: Sequelize.STRING,
             allowNull: false,
         },
     }
