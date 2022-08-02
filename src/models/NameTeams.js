@@ -12,11 +12,10 @@ const TeamName = db.define('Teams',
     },
     nameTeam: {
         type: Sequelize.STRING,
-        allowNull: false,
+        allowNull: true,
     },
 }
 );
 
-// TeamName.sync();
 
 module.exports = TeamName;
