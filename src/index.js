@@ -57,18 +57,129 @@
         try {
             const id = req.params.id
             console.log(id)
-            const user = await User.findAll(
+            const goleiro = await User.findAll(
                 {
                     where: {
-                        idTeam: {
-                            [Op.eq]: id,
-                        }
+                        [Op.and]: [
+                            { idTeam: id },
+                            { position: "Goleiro" }
+                        ]
                     }
                 }
             );
+            const zagueiro = await User.findAll(
+                {
+                    where: {
+                        [Op.and]: [
+                            { idTeam: id },
+                            { position: "Zagueiro" }
+                        ]
+                    }
+                }
+            );
+            const segundoZaguiro = await User.findAll(
+                {
+                    where: {
+                        [Op.and]: [
+                            { idTeam: id },
+                            { position: "Segundo Zaguiro" }
+                        ]
+                    }
+                }
+            );
+            const lateralDireito = await User.findAll(
+                {
+                    where: {
+                        [Op.and]: [
+                            { idTeam: id },
+                            { position: "Lateral Direito" }
+                        ]
+                    }
+                }
+            );
+            const lateralEsquerdo = await User.findAll(
+                {
+                    where: {
+                        [Op.and]: [
+                            { idTeam: id },
+                            { position: "Lateral Esquerdo" }
+                        ]
+                    }
+                }
+            );
+            const volante = await User.findAll(
+                {
+                    where: {
+                        [Op.and]: [
+                            { idTeam: id },
+                            { position: "Volante" }
+                        ]
+                    }
+                }
+            );
+            const meioCampo = await User.findAll(
+                {
+                    where: {
+                        [Op.and]: [
+                            { idTeam: id },
+                            { position: "Meio Campo" }
+                        ]
+                    }
+                }
+            );
+            const meiaAtacante = await User.findAll(
+                {
+                    where: {
+                        [Op.and]: [
+                            { idTeam: id },
+                            { position: "Meia Atacante" }
+                        ]
+                    }
+                }
+            );
+            const pontaDireita = await User.findAll(
+                {
+                    where: {
+                        [Op.and]: [
+                            { idTeam: id },
+                            { position: "Ponta Direita" }
+                        ]
+                    }
+                }
+            );
+            const pontaEsquerda = await User.findAll(
+                {
+                    where: {
+                        [Op.and]: [
+                            { idTeam: id },
+                            { position: "Ponta Esquerda" }
+                        ]
+                    }
+                }
+            );
+            const centroAvante = await User.findAll(
+                {
+                    where: {
+                        [Op.and]: [
+                            { idTeam: id },
+                            { position: "Centroavante" }
+                        ]
+                    }
+                }
+            );
+
             return res.json({
-                mensagen: "Usuários encontrados com sucesso!",
-                users: user
+                goleiro: goleiro,
+                zagueiro: zagueiro,
+                segundoZaguiro: segundoZaguiro,
+                lateralDireito: lateralDireito,
+                lateralEsquerdo: lateralEsquerdo,
+                Volante: volante,
+                meioCampo: meioCampo,
+                meiaAtacante: meiaAtacante,
+                pontaDireita: pontaDireita,
+                pontaEsquerda: pontaEsquerda,
+                centroAvante: centroAvante
             })
         } catch (error) {
             return res.status(400).json({
