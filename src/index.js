@@ -112,6 +112,101 @@
         }
     })
 
+    app.get("/player/:id", async function (req, res) {
+        try {
+            const id = req.params.id
+            console.log(id)
+            const player = await User.findOne(
+                {
+                    where: { id: id }
+                }
+
+            );
+            return res.json({
+                player: player,
+            })
+        } catch (error) {
+            return res.status(400).json({
+                mensagen: "Erro: Jogador não encontrado!",
+                error: error.message
+            })
+        }
+    })
+    app.post("/update/player/:id", async function (req, res) {
+        try {
+            const id = req.params.id;
+            const data = req.body;
+            console.log(data)
+            const upDatePlayer = await User.update(
+                {
+                    name: data.name,
+                    position: data.position,
+                    cap: data.cap,
+                    id: id
+                },
+                {
+                    where: { id: id }
+                }
+            );
+            return res.json({
+                upDatePlayer
+            })
+        } catch (error) {
+            return res.status(400).json({
+                mensagen: "Erro: Jogador não encontrado!",
+                error: error.message
+            })
+        }
+    });
+
+    app.post("/update/Team/:id", async function (req, res) {
+        try {
+            const id = req.params.id;
+            const data = req.body;
+            console.log(data)
+            const upDatePlayer = await TeamName.update(
+                {
+                    nameTeam: data.nameTeam,
+
+                },
+                {
+                    where: { id: id }
+                }
+            );
+            return res.json({
+                upDatePlayer
+            })
+        } catch (error) {
+            return res.status(400).json({
+                mensagen: "Erro: Equipe não encontrado!",
+                error: error.message
+            })
+        }
+    });
+
+    app.get("/delete/player/:id", async function (req, res) {
+        try {
+            const id = req.params.id;
+            console.log(id)
+            const deletePlayer = await User.destroy(
+                {
+                    where: {
+                        id: id
+                    }
+                }
+            );
+            return res.json({
+                deletePlayer,
+                mensagen: "Jogador deletado com sucesso!",
+            })
+        } catch (error) {
+            return res.status(400).json({
+                mensagen: "Erro: Jogador não deletado!",
+                error: error.message
+            })
+        }
+    });
+
     app.listen(8080)
 
 })();
