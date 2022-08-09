@@ -14,8 +14,11 @@ const TeamName = db.define('Teams',
         type: Sequelize.STRING,
         allowNull: true,
     },
+    image: {
+        type: Sequelize.STRING
+    }
 }
 );
-
+// TeamName.sync({alter: true})
 
 module.exports = TeamName;

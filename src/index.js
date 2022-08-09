@@ -7,10 +7,61 @@
     const User = require('./models/User');
     const Teams = require("./models/NameTeams");
     const TeamName = require("./models/NameTeams");
+    const path = require("path")
     const db = require('./models/dp');
+    const LogoTeam = ""
+    const uploadUserImage = require("./middlewares/uploadImage");
     //await db.sync({force:true})
     app.use(express.json());
     app.use(cors());
+
+    // http://localhost:8080/files/users/1660003473324_images.png
+    app.use("/files", express.static(path.resolve(__dirname, "public", "upload")))
+
+    // app.get("/list-image/:id", async function (req, res) {
+    //     try {
+    //         const id = req.params.id
+    //         console.log(id)
+    //         const image = await TeamName.findAll(
+    //             {
+    //                 where: {
+    //                     [Op.and]: [
+    //                         { id: id },
+    //                         { image: "" }
+    //                     ]
+    //                 }
+    //             }
+    //         )
+    //         return res.json({
+    //             erro: false,
+    //             mensagem: "Encontrado com sucesso!",
+    //             image
+    //         })
+    //     } catch (error) {
+    //         return res.status(400).json({
+    //             mensagen: "Erro: Image não encontrado!",
+    //             error: error.message
+    //         })
+    //     }
+    // });
+
+
+    app.post("/upload-image", uploadUserImage.single("image"), async (req, res) => {
+        try {
+            return res.json({
+                erro: false,
+                mensagem: "Upload efetuado com sucesso!",
+                image: req.file.filename
+            })
+
+
+        } catch (error) {
+            return res.status(400).json({
+                error: true,
+                mensagen: "Erro: Upload não efeuado!",
+            })
+        }
+    })
 
     app.post("/cadastrar", async function (req, res) {
         const data = req.body
@@ -19,7 +70,11 @@
             console.log("Dados não encontrados!");
             return res.status(400).send({ error: true, message: "Produtos não encontrados" });
         }
-        const team = await TeamName.create(data.nameTeam)
+        const team = await TeamName.create({
+            nameTeam: data.nameTeam.nameTeam,
+            image: data.nameLogo
+        })
+
         const players = await data.data.map((user) => {
             return User.create({
                 name: user.name,
@@ -206,6 +261,7 @@
             })
         }
     });
+
 
     app.listen(8080)
 

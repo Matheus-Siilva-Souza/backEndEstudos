@@ -21,15 +21,17 @@ const User = db.define('Players',
         cap: {
             type: Sequelize.BOOLEAN,
             allowNull: false,
-        },
+        }
     }
 );
 
+// User.sync({alter: true})
+
 TeamName.hasOne(User, {
-    constraint: true ,
+    constraint: true,
     foreignKey: 'idTeam'
-  });
-  User.belongsTo(TeamName)
+});
+User.belongsTo(TeamName)
 
 
 module.exports = User;
