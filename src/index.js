@@ -74,8 +74,7 @@
             nameTeam: data.nameTeam.nameTeam,
             image: data.nameLogo
         })
-
-        const players = await data.data.map((user) => {
+        const players = await data.player.map((user) => {
             return User.create({
                 name: user.name,
                 position: user.position,
