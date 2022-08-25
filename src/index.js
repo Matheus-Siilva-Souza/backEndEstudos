@@ -18,33 +18,6 @@
     // http://localhost:8080/files/users/1660003473324_images.png
     app.use("/files", express.static(path.resolve(__dirname, "public", "upload")))
 
-    // app.get("/list-image/:id", async function (req, res) {
-    //     try {
-    //         const id = req.params.id
-    //         console.log(id)
-    //         const image = await TeamName.findAll(
-    //             {
-    //                 where: {
-    //                     [Op.and]: [
-    //                         { id: id },
-    //                         { image: "" }
-    //                     ]
-    //                 }
-    //             }
-    //         )
-    //         return res.json({
-    //             erro: false,
-    //             mensagem: "Encontrado com sucesso!",
-    //             image
-    //         })
-    //     } catch (error) {
-    //         return res.status(400).json({
-    //             mensagen: "Erro: Image não encontrado!",
-    //             error: error.message
-    //         })
-    //     }
-    // });
-
 
     app.post("/upload-image", uploadUserImage.single("image"), async (req, res) => {
         try {
@@ -256,6 +229,29 @@
         } catch (error) {
             return res.status(400).json({
                 mensagen: "Erro: Jogador não deletado!",
+                error: error.message
+            })
+        }
+    });
+
+    app.get("/delete/Team/:id", async function (req, res) {
+        try {
+            const id = req.params.id;
+            console.log(id)
+            const deleteTeam = await TeamName.destroy(
+                {
+                    where: {
+                        id: id
+                    }
+                }
+            );
+            return res.json({
+                deleteTeam,
+                mensagen: "Equipe deletada com sucesso!",
+            })
+        } catch (error) {
+            return res.status(400).json({
+                mensagen: "Erro: Equipe não deletada!",
                 error: error.message
             })
         }
