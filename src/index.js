@@ -1,23 +1,25 @@
 (async () => {
 
-    const express = require("express");
-    const cors = require('cors');
-    const { Op } = require('sequelize')
-    const app = express();
-    const User = require('./models/User');
-    const Teams = require("./models/NameTeams");
-    const TeamName = require("./models/NameTeams");
-    const path = require("path")
-    const db = require('./models/dp');
-    const LogoTeam = ""
     const uploadUserImage = require("./middlewares/uploadImage");
+    const routerUser = require("./controllers/UserControllers");
+    const routerTeam = require("./controllers/TeamControllers");
+    const TeamName = require("./models/Teams");
+    const Teams = require("./models/Teams");
+    const User = require('./models/User');
+    const express = require("express");
+    const db = require('./models/dp');
+    const cors = require('cors');
+    const path = require("path");
+    const app = express();
+    const LogoTeam = ""
     //await db.sync({force:true})
     app.use(express.json());
     app.use(cors());
+    app.use(routerTeam);
+    app.use(routerUser);
 
     // http://localhost:8080/files/users/1660003473324_images.png
     app.use("/files", express.static(path.resolve(__dirname, "public", "upload")))
-
 
     app.post("/upload-image", uploadUserImage.single("image"), async (req, res) => {
         try {
@@ -69,195 +71,8 @@
         }
     })
 
-    app.get("/Team", async function (req, res) {
-        const project = await Teams.findAll();
-        if (project === null) {
-            console.log('Not found!');
-        }
-        return res.json({
-            mensagen: "Equipes Encontradas com sucesso!",
-            users: project
-        })
-    })
 
-    app.get("/Team/:id", async function (req, res) {
-        try {
-            const id = req.params.id
-            console.log(id)
-            const goalkeeper = await User.findAll(
-                {
-                    where: {
-                        [Op.and]: [
-                            { idTeam: id },
-                            { position: "Goleiro" }
-                        ]
-                    }
-                }
-            );
-            const defense = await User.findAll(
-                {
-                    where: {
-                        [Op.and]: [
-                            { idTeam: id },
-                            { position: ["Zagueiro", "Segundo Zaguiro", "Lateral Direito", "Lateral Esquerdo"] }
-                        ]
-                    }
-                }
-            );
-            const midfield = await User.findAll(
-                {
-                    where: {
-                        [Op.and]: [
-                            { idTeam: id },
-                            { position: ["Volante", "Meio Campo", "Meia Atacante"] }
-                        ]
-                    }
-                }
-            );
-            const attacker = await User.findAll(
-                {
-                    where: {
-                        [Op.and]: [
-                            { idTeam: id },
-                            { position: ["Ponta Direita", "Ponta Esquerda", "Centroavante"] }
-                        ]
-                    }
-                }
-            );
-
-            return res.json({
-                goalkeeper: goalkeeper,
-                defense: defense,
-                midfield: midfield,
-                attacker: attacker
-            })
-        } catch (error) {
-            return res.status(400).json({
-                mensagen: "Erro: Não encontrado!",
-                error: error.message
-            })
-        }
-    })
-
-    app.get("/player/:id", async function (req, res) {
-        try {
-            const id = req.params.id
-            console.log(id)
-            const player = await User.findOne(
-                {
-                    where: { id: id }
-                }
-
-            );
-            return res.json({
-                player: player,
-            })
-        } catch (error) {
-            return res.status(400).json({
-                mensagen: "Erro: Jogador não encontrado!",
-                error: error.message
-            })
-        }
-    })
-    app.post("/update/player/:id", async function (req, res) {
-        try {
-            const id = req.params.id;
-            const data = req.body;
-            console.log(data)
-            const upDatePlayer = await User.update(
-                {
-                    name: data.name,
-                    position: data.position,
-                    cap: data.cap,
-                    id: id
-                },
-                {
-                    where: { id: id }
-                }
-            );
-            return res.json({
-                upDatePlayer
-            })
-        } catch (error) {
-            return res.status(400).json({
-                mensagen: "Erro: Jogador não encontrado!",
-                error: error.message
-            })
-        }
-    });
-
-    app.post("/update/Team/:id", async function (req, res) {
-        try {
-            const id = req.params.id;
-            const data = req.body;
-            console.log(data)
-            const upDatePlayer = await TeamName.update(
-                {
-                    nameTeam: data.nameTeam,
-
-                },
-                {
-                    where: { id: id }
-                }
-            );
-            return res.json({
-                upDatePlayer
-            })
-        } catch (error) {
-            return res.status(400).json({
-                mensagen: "Erro: Equipe não encontrado!",
-                error: error.message
-            })
-        }
-    });
-
-    app.get("/delete/player/:id", async function (req, res) {
-        try {
-            const id = req.params.id;
-            console.log(id)
-            const deletePlayer = await User.destroy(
-                {
-                    where: {
-                        id: id
-                    }
-                }
-            );
-            return res.json({
-                deletePlayer,
-                mensagen: "Jogador deletado com sucesso!",
-            })
-        } catch (error) {
-            return res.status(400).json({
-                mensagen: "Erro: Jogador não deletado!",
-                error: error.message
-            })
-        }
-    });
-
-    app.get("/delete/Team/:id", async function (req, res) {
-        try {
-            const id = req.params.id;
-            console.log(id)
-            const deleteTeam = await TeamName.destroy(
-                {
-                    where: {
-                        id: id
-                    }
-                }
-            );
-            return res.json({
-                deleteTeam,
-                mensagen: "Equipe deletada com sucesso!",
-            })
-        } catch (error) {
-            return res.status(400).json({
-                mensagen: "Erro: Equipe não deletada!",
-                error: error.message
-            })
-        }
-    });
 
 
     app.listen(8080)
-
 })();

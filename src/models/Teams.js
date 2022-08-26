@@ -2,7 +2,7 @@ const Sequelize = require('sequelize');
 const db = require("./dp");
 
 
-const TeamName = db.define('Teams',
+const Team = db.define('Teams',
 {
     id: {
         type: Sequelize.INTEGER,
@@ -21,4 +21,4 @@ const TeamName = db.define('Teams',
 );
 // TeamName.sync({alter: true})
 
-module.exports = TeamName;
+module.exports = Team;

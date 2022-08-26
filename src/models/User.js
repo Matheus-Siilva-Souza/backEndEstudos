@@ -1,6 +1,6 @@
 const Sequelize = require('sequelize');
 const db = require('./dp');
-const TeamName = require("./NameTeams");
+const Team = require("./Teams");
 
 const User = db.define('Players',
     {
@@ -27,11 +27,11 @@ const User = db.define('Players',
 
 // User.sync({alter: true})
 
-TeamName.hasOne(User, {
+Team.hasOne(User, {
     constraint: true,
     foreignKey: 'idTeam'
 });
-User.belongsTo(TeamName)
+User.belongsTo(Team)
 
 
 module.exports = User;
