@@ -1,8 +1,10 @@
+
 (async () => {
 
     const uploadUserImage = require("./middlewares/uploadImage");
     const routerUser = require("./controllers/UserControllers");
     const routerTeam = require("./controllers/TeamControllers");
+    const routerForm = require("./controllers/FormControllers");
     const TeamName = require("./models/Teams");
     const Teams = require("./models/Teams");
     const User = require('./models/User');
@@ -17,6 +19,7 @@
     app.use(cors());
     app.use(routerTeam);
     app.use(routerUser);
+    app.use(routerForm);
 
     // http://localhost:8080/files/users/1660003473324_images.png
     app.use("/files", express.static(path.resolve(__dirname, "public", "upload")))
