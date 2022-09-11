@@ -1,10 +1,9 @@
 const express = require("express");
 const routerTeam = express.Router();
 const Teams = require("../models/Teams");
-const User = require('../models/User');
+const Player = require('../models/Player');
 const { Op } = require('sequelize');
 const TeamName = require("../models/Teams");
-
 
 routerTeam.get("/Team", async function (req, res) {
     const project = await Teams.findAll();
@@ -21,7 +20,7 @@ routerTeam.get("/Team/:id", async function (req, res) {
     try {
         const id = req.params.id
         console.log(id)
-        const goalkeeper = await User.findAll(
+        const goalkeeper = await Player.findAll(
             {
                 where: {
                     [Op.and]: [
@@ -31,7 +30,7 @@ routerTeam.get("/Team/:id", async function (req, res) {
                 }
             }
         );
-        const defense = await User.findAll(
+        const defense = await Player.findAll(
             {
                 where: {
                     [Op.and]: [
@@ -41,7 +40,7 @@ routerTeam.get("/Team/:id", async function (req, res) {
                 }
             }
         );
-        const midfield = await User.findAll(
+        const midfield = await Player.findAll(
             {
                 where: {
                     [Op.and]: [
@@ -51,7 +50,7 @@ routerTeam.get("/Team/:id", async function (req, res) {
                 }
             }
         );
-        const attacker = await User.findAll(
+        const attacker = await Player.findAll(
             {
                 where: {
                     [Op.and]: [

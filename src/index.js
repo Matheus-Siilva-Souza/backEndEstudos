@@ -2,22 +2,24 @@
 (async () => {
 
     const uploadUserImage = require("./middlewares/uploadImage");
-    const routerUser = require("./controllers/UserControllers");
+    const routerPlayer = require("./controllers/PlayerControllers");
     const routerTeam = require("./controllers/TeamControllers");
+    const routerUser = require("./controllers/UserControllers");
     const routerForm = require("./controllers/FormControllers");
     const TeamName = require("./models/Teams");
     const Teams = require("./models/Teams");
-    const User = require('./models/User');
+    const Player = require('./models/Player');
     const express = require("express");
     const db = require('./models/dp');
     const cors = require('cors');
     const path = require("path");
     const app = express();
     const LogoTeam = ""
-    //await db.sync({force:true})
+    // await db.sync({force:true})
     app.use(express.json());
     app.use(cors());
     app.use(routerTeam);
+    app.use(routerPlayer);
     app.use(routerUser);
     app.use(routerForm);
 
@@ -73,7 +75,6 @@
             })
         }
     })
-
 
 
 

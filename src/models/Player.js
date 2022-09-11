@@ -1,7 +1,8 @@
 const Sequelize = require('sequelize');
 const db = require('./dp');
+const Team = require("./Teams");
 
-const User = db.define('Users',
+const Player = db.define('Players',
     {
         id: {
             type: Sequelize.INTEGER,
@@ -13,17 +14,24 @@ const User = db.define('Users',
             type: Sequelize.STRING,
             allowNull: false,
         },
-        email: {
+        position: {
             type: Sequelize.STRING,
             allowNull: false,
         },
-        password: {
-            type: Sequelize.STRING,
+        cap: {
+            type: Sequelize.BOOLEAN,
             allowNull: false,
         }
     }
 );
 
-// User.sync({ alter: true })
+// User.sync({alter: true})
 
-module.exports = User;
+Team.hasOne(Player, {
+    constraint: true,
+    foreignKey: 'idTeam'
+});
+Player.belongsTo(Team)
+
+
+module.exports = Player;

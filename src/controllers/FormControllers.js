@@ -21,7 +21,27 @@ routerForm.post("/creatFormation", async function (req, res) {
             error: error.message
         })
     }
-})
+});
+
+routerForm.get("/form/:id", async function (req, res) {
+    try {
+        const id = req.params.id;
+        console.log(id);
+        const result = await Formation.findAll(
+            {
+                where: { idTeam: id }
+            }
+        )
+        return res.json({
+            result: result
+        })
+    } catch (error) {
+        return res.status(400).json({
+            mensagen: "Houve um problema",
+            error: error.message
+        })
+    }
+});
 
 
 module.exports = routerForm;
