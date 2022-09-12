@@ -5,18 +5,20 @@ const Player = require('../models/Player');
 const { Op } = require('sequelize');
 const TeamName = require("../models/Teams");
 
-routerTeam.get("/Team", async function (req, res) {
+
+routerTeam.get("/Team", async function (req, res, next) {
     const project = await Teams.findAll();
+    // verifyJWT(req, res, next);
     if (project === null) {
         console.log('Not found!');
     }
     return res.json({
         mensagen: "Equipes Encontradas com sucesso!",
-        users: project
+        users: project,
     })
 })
 
-routerTeam.get("/Team/:id", async function (req, res) {
+routerTeam.get("/Team/:id", async function (req, res, next) {
     try {
         const id = req.params.id
         console.log(id)
@@ -75,7 +77,7 @@ routerTeam.get("/Team/:id", async function (req, res) {
     }
 })
 
-routerTeam.post("/update/Team/:id", async function (req, res) {
+routerTeam.post("/update/Team/:id", async function (req, res, next) {
     try {
         const id = req.params.id;
         const data = req.body;
@@ -100,7 +102,7 @@ routerTeam.post("/update/Team/:id", async function (req, res) {
     }
 });
 
-routerTeam.get("/delete/Team/:id", async function (req, res) {
+routerTeam.get("/delete/Team/:id", async function (req, res, next) {
     try {
         const id = req.params.id;
         console.log(id)
@@ -122,5 +124,6 @@ routerTeam.get("/delete/Team/:id", async function (req, res) {
         })
     }
 });
+
 
 module.exports = routerTeam;

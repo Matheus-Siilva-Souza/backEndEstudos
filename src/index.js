@@ -1,32 +1,47 @@
 
 (async () => {
 
-    const uploadUserImage = require("./middlewares/uploadImage");
     const routerPlayer = require("./controllers/PlayerControllers");
     const routerTeam = require("./controllers/TeamControllers");
     const routerUser = require("./controllers/UserControllers");
     const routerForm = require("./controllers/FormControllers");
     const TeamName = require("./models/Teams");
-    const Teams = require("./models/Teams");
     const Player = require('./models/Player');
     const express = require("express");
-    const db = require('./models/dp');
     const cors = require('cors');
     const path = require("path");
     const app = express();
-    const LogoTeam = ""
-    // await db.sync({force:true})
+    const jwt = require('jsonwebtoken');
+    const uploadUserImage = require("./middlewares/uploadImage");
+
+    
+    app.use("/files", express.static(path.resolve(__dirname, "public", "upload")))
     app.use(express.json());
     app.use(cors());
+    app.use(routerUser);
+    app.use(verifyJWT)
     app.use(routerTeam);
     app.use(routerPlayer);
-    app.use(routerUser);
     app.use(routerForm);
 
-    // http://localhost:8080/files/users/1660003473324_images.png
-    app.use("/files", express.static(path.resolve(__dirname, "public", "upload")))
+    function verifyJWT(req, res, next) {
+        var token = req.headers['x-access-token'];
+        if (!token) {
+            return (
+                res.status(401).json({ auth: false, message: 'Token não informado.' })
+            )
+        }
+        jwt.verify(token, process.env.SECRET, function (err, decoded) {
+            if (err) return res.status(500).json({ auth: false, message: 'Token inválido.' });
 
-    app.post("/upload-image", uploadUserImage.single("image"), async (req, res) => {
+            req.userId = decoded.id;
+            console.log("User Id: " + decoded.id, "token: " + token)
+            return next()
+        })
+
+    }
+
+    app.post("/upload-image", uploadUserImage.single("image"), async (req, res, next) => {
         try {
             return res.json({
                 erro: false,
@@ -55,7 +70,7 @@
             image: data.nameLogo
         })
         const players = await data.player.map((user) => {
-            return User.create({
+            return Player.create({
                 name: user.name,
                 position: user.position,
                 cap: user.cap,
