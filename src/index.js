@@ -14,7 +14,7 @@
     const jwt = require('jsonwebtoken');
     const uploadUserImage = require("./middlewares/uploadImage");
 
-    
+
     app.use("/files", express.static(path.resolve(__dirname, "public", "upload")))
     app.use(express.json());
     app.use(cors());
@@ -32,7 +32,7 @@
             )
         }
         jwt.verify(token, process.env.SECRET, function (err, decoded) {
-            if (err) return res.status(500).json({ auth: false, message: 'Token inválido.' });
+            if (err) return res.status(500).json({ auth: false, message: 'Login expirado' });
 
             req.userId = decoded.id;
             console.log("User Id: " + decoded.id, "token: " + token)
@@ -61,13 +61,15 @@
     app.post("/cadastrar", async function (req, res) {
         const data = req.body
         console.log(data)
+
         if (!data) {
             console.log("Dados não encontrados!");
-            return res.status(400).send({ error: true, message: "Produtos não encontrados" });
+            return res.status(400).send({ error: true, message: "Dados não encontrados" });
         }
         const team = await TeamName.create({
             nameTeam: data.nameTeam.nameTeam,
-            image: data.nameLogo
+            image: data.nameLogo,
+            userID: data.id
         })
         const players = await data.player.map((user) => {
             return Player.create({

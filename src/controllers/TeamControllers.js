@@ -6,9 +6,16 @@ const { Op } = require('sequelize');
 const TeamName = require("../models/Teams");
 
 
-routerTeam.get("/Team", async function (req, res, next) {
-    const project = await Teams.findAll();
-    // verifyJWT(req, res, next);
+routerTeam.get("/User/Team/:id", async function (req, res, next) {
+    const id = req.params.id
+    console.log(id)
+    const project = await Teams.findAll(
+        {
+            where: {
+                userID: id
+            }
+        }
+    );
     if (project === null) {
         console.log('Not found!');
     }
@@ -85,7 +92,6 @@ routerTeam.post("/update/Team/:id", async function (req, res, next) {
         const upDatePlayer = await TeamName.update(
             {
                 nameTeam: data.nameTeam,
-
             },
             {
                 where: { id: id }
